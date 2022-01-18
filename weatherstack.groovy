@@ -181,6 +181,10 @@ void poll() {
         log.warn 'No response from weatherstack API'
         return
     }
+    else if (obs.success != "true") {
+        log.error "Weatherstack API returned error'
+        displayDebugLog("$obs.error")
+    }
     displayDebugLog("$obs")
 
     String dateTimeFormat = 'yyyy-MM-dd HH:mm'
@@ -261,12 +265,12 @@ private Map getObservation() {
     try {
         // TODO: add check for success
         httpGet(uri) { resp ->
-            if (resp?.data) {
+            if (resp?.data && resp.data.success) {
                 displayDebugLog('getObservation returned data')
                 obs = resp.data
             }
             else {
-                log.error("weatherstack api did not return data: $resp")
+                log.error("weatherstack api did not return data successfully: $resp")
             }
         }
     } catch (e) {
