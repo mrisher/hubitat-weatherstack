@@ -182,7 +182,7 @@ void poll() {
         return
     }
     else if (obs.success != "true") {
-        log.error "Weatherstack API returned error'
+        log.error('Weatherstack API returned error')
         displayDebugLog("$obs.error")
     }
     displayDebugLog("$obs")
