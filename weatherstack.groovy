@@ -181,7 +181,7 @@ void poll() {
         log.warn 'No response from weatherstack API'
         return
     }
-    else if (obs.success != "true") {
+    else if (obs?.success && obs.success == "false") {
         log.error('Weatherstack API returned error')
         displayDebugLog("$obs.error")
     }
@@ -265,12 +265,12 @@ private Map getObservation() {
     try {
         // TODO: add check for success
         httpGet(uri) { resp ->
-            if (resp?.data && resp.data.success) {
+            if (resp?.data && resp.data?.request) {
                 displayDebugLog('getObservation returned data')
                 obs = resp.data
             }
             else {
-                log.error("weatherstack api did not return data successfully: $resp")
+                log.error("weatherstack api did not return data successfully: $resp.data")
             }
         }
     } catch (e) {
